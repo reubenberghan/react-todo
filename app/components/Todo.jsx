@@ -4,10 +4,13 @@ const React = require('react');
 
 const Todo = React.createClass({
     render: function renderTodo () {
-        var { id, text } = this.props;
+        var { id, text, completed } = this.props;
 
         return (
-            <div>{ `${ id }: ${ text }` }</div>
+            <div>
+                <input type="checkbox" id={ id } checked={ completed } onChange={ () => this.props.onToggle(id) } />
+                <label htmlFor={ id }>{ text }</label>
+            </div>
         );
     }
 });

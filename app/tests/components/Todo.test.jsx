@@ -18,4 +18,20 @@ describe('Todo', () => {
         expect(Todo).toExist();
     });
 
+    it('should call onToggle prop with id on click', () => {
+
+        var testTodo = { id: 11, text: 'test task', completed: false };
+
+        var spy = expect.createSpy();
+
+        var todo = TestUtils.renderIntoDocument(<Todo { ...testTodo } onToggle={ spy } />);
+
+        var $el = $(ReactDOM.findDOMNode(todo));
+
+        TestUtils.Simulate.change($el.find('input[type="checkbox"]')[0]);
+
+        expect(spy).toHaveBeenCalledWith(testTodo.id);
+
+    });
+
 });

@@ -18,7 +18,7 @@ const TodoList = React.createClass({
                 // note that we can pass each prop of the `todo` item down to the `Todo` component using the spread operator
                 // this means we don't have to explicitly define the props we want to pass down
                 return (
-                    <Todo key={ todo.id } { ...todo } />
+                    <Todo key={ todo.id } { ...todo } onToggle={ this.props.onToggle } />
                 );
             });
         };
