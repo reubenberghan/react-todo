@@ -1,15 +1,31 @@
 'use strict';
 
 const React = require('react');
+const moment = require('moment');
 
 const Todo = React.createClass({
     render: function renderTodo () {
-        var { id, text, completed } = this.props;
+        var { id, text, completed, createdAt, completedAt } = this.props;
+        var renderDate = () => {
+            var message = 'Created ';
+            var timestamp = createdAt;
+
+            if (completed) {
+                message = 'Completed ';
+                timestamp = completedAt;
+            }
+
+            return message + moment.unix(timestamp).format('MMM Do YYYY @ h:mm a');
+        };
 
         return (
             <div>
                 <input type="checkbox" id={ id } checked={ completed } onChange={ () => this.props.onToggle(id) } />
-                <label htmlFor={ id }>{ text }</label>
+                <label htmlFor={ id }>
+                    { text }
+                    <br />
+                    { renderDate() }
+                </label>
             </div>
         );
     }
