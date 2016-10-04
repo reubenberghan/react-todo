@@ -13,6 +13,12 @@ const TodoList = React.createClass({
         // this `key` prop is used internally by React to keep track of the individual components
         // in our case each `todo` has an `id` property which we can use
         var renderTodos = () => {
+            if (todos.length === 0) {
+                return (
+                    <p className="container__message">Nothing to do...</p>
+                );
+            }
+
             return todos.map((todo) => {
 
                 // note that we can pass each prop of the `todo` item down to the `Todo` component using the spread operator
