@@ -4,7 +4,7 @@ const React = require('react');
 const uuid = require('node-uuid');
 const moment = require('moment');
 
-const TodoList = require('TodoList');
+import TodoList from 'TodoList';
 const AddTodo = require('AddTodo');
 const TodoSearch = require('TodoSearch');
 const TodoAPI = require('TodoAPI');
@@ -33,18 +33,20 @@ const TodoApp = React.createClass({
             ]
         });
     },
-    handleToggle: function handleToggleTodoApp (id) {
-        var updatedTodos = this.state.todos.map(todo => {
-            if (todo.id === id) {
-                todo.completed = !todo.completed;
-                todo.completedAt = todo.completed ? moment().unix() : null;
-            }
+    // // with the help of redux we can replace the need for having this function at the top component level 
+    // // and having to passing it right down to the `todo` component 
+    // handleToggle: function handleToggleTodoApp (id) {
+    //     var updatedTodos = this.state.todos.map(todo => {
+    //         if (todo.id === id) {
+    //             todo.completed = !todo.completed;
+    //             todo.completedAt = todo.completed ? moment().unix() : null;
+    //         }
 
-            return todo;
-        });
+    //         return todo;
+    //     });
         
-        this.setState({ todos: updatedTodos });
-    },
+    //     this.setState({ todos: updatedTodos });
+    // },
     handleSearch: function handleSearchTodoApp (showCompleted, searchText) {
         this.setState({
             showCompleted: showCompleted,
@@ -62,7 +64,7 @@ const TodoApp = React.createClass({
                     <div className="column small-centered small-11 medium-6 large-5">
                         <div className="container">
                             <TodoSearch onSearch={ this.handleSearch } />
-                            <TodoList todos={ filteredTodos } onToggle={ this.handleToggle } />
+                            <TodoList />
                             <AddTodo onAddTodo={ this.handleAddTodo } />
                         </div>
                     </div>
