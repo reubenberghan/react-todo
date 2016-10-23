@@ -14,14 +14,14 @@ describe('Actions', () => {
             type: 'SET_SEARCH_TEXT',
             searchText: 'Some search text'
         };
-        let res = actions.setSearchText(action.searchText);
+        const res = actions.setSearchText(action.searchText);
 
         expect(res).toEqual(action);
     });
 
     it('should generate toggle show completed action', () => {
         const action = { type: 'TOGGLE_SHOW_COMPLETED' };
-        let res = actions.toggleShowCompleted();
+        const res = actions.toggleShowCompleted();
 
         expect(res).toEqual(action);
     });
@@ -31,7 +31,24 @@ describe('Actions', () => {
             type: 'ADD_TODO',
             text: 'Thing to do'
         };
-        let res = actions.addTodo(action.text);
+        const res = actions.addTodo(action.text);
+
+        expect(res).toEqual(action);
+    });
+
+    it('should generate add todos action object', () => {
+        const todos = [{
+            id: '111',
+            text: 'anything',
+            completed: false,
+            completedAt: null,
+            createdAt: 100
+        }];
+        const action = {
+            type: 'ADD_TODOS',
+            todos
+        };
+        const res = actions.addTodos(todos);
 
         expect(res).toEqual(action);
     });
@@ -41,7 +58,7 @@ describe('Actions', () => {
             type: 'TOGGLE_TODO',
             id: 1
         };
-        let res = actions.toggleTodo(1);
+        const res = actions.toggleTodo(1);
 
         expect(res).toEqual(action);
     });

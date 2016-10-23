@@ -45,6 +45,11 @@ export const todosReducer = (state = [], action) => {
 
                 return Object.assign({}, todo, updatedTodoProps);
             });
+        case 'ADD_TODOS':
+            return [
+                ...state,
+                ...action.todos
+            ];
         default:
             return state;
     };
