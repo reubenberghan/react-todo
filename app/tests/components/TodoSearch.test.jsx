@@ -1,16 +1,16 @@
 'use strict';
 
 // all the modules required to run the tests on the components
-var React = require('react');
-var ReactDOM = require('react-dom');
-var expect = require('expect');
-var $ = require('jQuery');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const expect = require('expect');
+const $ = require('jQuery');
 // this is a special module required for react testing as we need to be able to 'render' the component to test its functions
 // and this module provides the utilities to do so
-var TestUtils = require('react-addons-test-utils');
+const TestUtils = require('react-addons-test-utils');
 
 // our component to be tested
-var TodoSearch = require('TodoSearch');
+import { TodoSearch } from 'TodoSearch';
 
 describe('TodoSearch', () => {
 
@@ -18,35 +18,38 @@ describe('TodoSearch', () => {
         expect('TodoSearch').toExist();
     });
 
-    it('should call onSearch with entered input text', () => {
+    it('should dispatch SET_SEARCH_TEXT on input change', () => {
 
-        var testSearchStr = 'Dog';
-        var testCompletedBool = false;
+        const testSearchStr = 'Dog';
+        const action = {
+            type: 'SET_SEARCH_TEXT',
+            searchText: testSearchStr
+        };
 
-        var spy = expect.createSpy();
-        var todoSearch = TestUtils.renderIntoDocument(<TodoSearch onSearch={ spy } />);
+        const spy = expect.createSpy();
+        const todoSearch = TestUtils.renderIntoDocument(<TodoSearch dispatch={ spy } />);
 
         todoSearch.refs.searchText.value = testSearchStr;
 
         TestUtils.Simulate.change(todoSearch.refs.searchText);
 
-        expect(spy).toHaveBeenCalledWith(testCompletedBool, testSearchStr);
+        expect(spy).toHaveBeenCalledWith(action);
 
     });
 
-    it('should call onSearch with proper checked value', () => {
+    it('should dispatch TOGGLE_SHOW_COMPLETED when checkbox checked', () => {
 
-        var testSearchStr = '';
-        var testCompletedBool = true;
+        const action = { type: 'TOGGLE_SHOW_COMPLETED' };
+        const testCompletedBool = true;
 
-        var spy = expect.createSpy();
-        var todoSearch = TestUtils.renderIntoDocument(<TodoSearch onSearch={ spy } />);
+        const spy = expect.createSpy();
+        const todoSearch = TestUtils.renderIntoDocument(<TodoSearch dispatch={ spy } />);
 
         todoSearch.refs.showCompleted.checked = testCompletedBool;
 
         TestUtils.Simulate.change(todoSearch.refs.showCompleted);
         
-        expect(spy).toHaveBeenCalledWith(testCompletedBool, testSearchStr);
+        expect(spy).toHaveBeenCalledWith(action);
 
     });
 

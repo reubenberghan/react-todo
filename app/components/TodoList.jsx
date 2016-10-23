@@ -3,11 +3,12 @@
 const React = require('react');
 const { connect } = require('react-redux');
 import Todo from 'Todo';
+const TodoAPI = require('TodoAPI');
 
 // as with our `Todo` component for testing we need to export our `TodoList` component before it has `connect` called on it
 export const TodoList = React.createClass({
     render: function renderTodoList () {
-        var { todos } = this.props;
+        var { todos, showCompleted, searchText } = this.props;
 
         // as our todos come as an array list we need a function map over that array and return each item
         // we can use the built in JavaScript array method `map` to do just that
@@ -21,7 +22,7 @@ export const TodoList = React.createClass({
                 );
             }
 
-            return todos.map((todo) => {
+            return TodoAPI.filterTodos(todos, showCompleted, searchText).map((todo) => {
 
                 // note that we can pass each prop of the `todo` item down to the `Todo` component using the spread operator
                 // this means we don't have to explicitly define the props we want to pass down
@@ -42,9 +43,7 @@ export const TodoList = React.createClass({
 // using the `connect` method from `react-redux` we can pass the requried state to the component
 // to ensure our 'connected' component is the one used when it is 'required' by other files we export it using `default`
 export default connect(
-    state => {
-        return { todos: state.todos };
-    }
+    state => state
 )(TodoList);
 
 // module.exports = TodoList;
