@@ -9,6 +9,8 @@ const $ = require('jQuery');
 // and this module provides the utilities to do so
 const TestUtils = require('react-addons-test-utils');
 
+import * as actions from 'actions';
+
 // our component to be tested
 import { AddTodo } from 'AddTodo';
 
@@ -22,10 +24,8 @@ describe('AddTodo', () => {
 
         const spy = expect.createSpy();
         const testStr = 'test string';
-        const action = {
-            type: 'ADD_TODO',
-            text: testStr
-        };
+        const action = actions.startAddTodo(testStr);
+
         const addTodo = TestUtils.renderIntoDocument(<AddTodo dispatch={ spy } />);
         const $el = $(ReactDOM.findDOMNode(addTodo));
 

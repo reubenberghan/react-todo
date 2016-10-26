@@ -9,7 +9,7 @@ export const AddTodo = React.createClass({
         e.preventDefault();
         const { dispatch } = this.props;
 
-        let todoStr = this.refs.todoText.value;
+        const todoStr = this.refs.todoText.value;
 
         if (todoStr.length > 0) {
             this.refs.todoText.value = '';
