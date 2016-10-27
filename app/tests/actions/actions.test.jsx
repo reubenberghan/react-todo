@@ -4,7 +4,8 @@ import configureMockStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 const expect = require('expect');
 
-const actions = require('actions');
+import firebase, { firebaseRef } from 'app/firebase';
+import * as actions from 'actions';
 
 const createMockStore = configureMockStore([ thunk ]);
 
@@ -74,14 +75,57 @@ describe('Actions', () => {
         expect(res).toEqual(action);
     });
 
-    it('should generate toggle todo action', () => {
+    it('should generate update todo action', () => {
         const action = {
-            type: 'TOGGLE_TODO',
-            id: 1
+            type: 'UPDATE_TODO',
+            id: 1,
+            updates: { completed: false }
         };
-        const res = actions.toggleTodo(1);
+        const res = actions.updateTodo(action.id, action.updates);
 
         expect(res).toEqual(action);
+    });
+
+    describe('Tests with firebase todos', () => {
+        let testTodoRef;
+
+        beforeEach(done => {
+            testTodoRef = firebaseRef.child('todos').push();
+
+            testTodoRef.set({
+                text: 'Something to do',
+                completed: false,
+                createdAt: 1234567
+            }).then(done);
+        });
+
+        afterEach(done => {
+            testTodoRef.remove().then(done);
+        });
+
+        it('should toggle todo and dispatch UPDATE_TODO action', done => {
+            const store = createMockStore();
+            const action = actions.startUpdateTodo(testTodoRef.key, false);
+
+            const resAction = {
+                type: 'UPDATE_TODO',
+                id: testTodoRef.key,
+                updates: { completed: true }
+            };
+
+            store.dispatch(action)
+                .then(() => {
+                    const mockActions = store.getActions();
+                    
+                    // as `completedAt` is a timestamp generated inside the action we use the `toInclude` and `toExist` methods
+                    // `toInclude` ensures the returned object contains the same properties and values
+                    // while `toExist` allows us to ensure `completedAt` is in the returned object even though we can't test the value
+                    expect(mockActions[0]).toInclude(resAction);
+                    expect(mockActions[0].updates.completedAt).toExist();
+
+                    done();
+                }, done);
+        });
     });
 
 });

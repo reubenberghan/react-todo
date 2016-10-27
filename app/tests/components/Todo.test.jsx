@@ -9,8 +9,10 @@ const $ = require('jQuery');
 // and this module provides the utilities to do so
 const TestUtils = require('react-addons-test-utils');
 
+import * as actions from 'actions';
+
 // our component to be tested
-const { Todo } = require('Todo');
+import { Todo } from 'Todo';
 
 describe('Todo', () => {
 
@@ -21,7 +23,8 @@ describe('Todo', () => {
     it('should dispatch TOGGLE_TODO with id on click', () => {
 
         const testTodo = { id: 11, text: 'test task', completed: false };
-        const testAction = { type: 'TOGGLE_TODO', id: testTodo.id };
+
+        const action = actions.startUpdateTodo(testTodo.id, testTodo.completed);
 
         const spy = expect.createSpy();
 
@@ -31,7 +34,7 @@ describe('Todo', () => {
 
         TestUtils.Simulate.change($el.find('input[type="checkbox"]')[0]);
 
-        expect(spy).toHaveBeenCalledWith(testAction);
+        expect(spy).toHaveBeenCalledWith(action);
 
     });
 

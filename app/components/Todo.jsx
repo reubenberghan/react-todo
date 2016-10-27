@@ -9,11 +9,11 @@ const actions = require('actions');
 // as what is exported below as the default has been passed through the `connect` method and expects a store
 export const Todo = React.createClass({
     render: function renderTodo () {
-        var { id, text, completed, createdAt, completedAt, dispatch } = this.props;
-        var todoClassName = completed ? 'todo todo-completed' : 'todo';
-        var renderDate = () => {
-            var message = 'Created ';
-            var timestamp = createdAt;
+        const { id, text, completed, createdAt, completedAt, dispatch } = this.props;
+        const todoClassName = completed ? 'todo todo-completed' : 'todo';
+        const renderDate = () => {
+            let message = 'Created ';
+            let timestamp = createdAt;
 
             if (completed) {
                 message = 'Completed ';
@@ -25,7 +25,7 @@ export const Todo = React.createClass({
 
         return (
             <div className={ todoClassName }>
-                <input type="checkbox" id={ id } checked={ completed } onChange={ () => dispatch(actions.toggleTodo(id)) } />
+                <input type="checkbox" id={ id } checked={ completed } onChange={ () => dispatch(actions.startUpdateTodo(id, completed)) } />
                 <label htmlFor={ id }>
                     <p>{ text }</p>
                     <p className="todo__subtext">{ renderDate() }</p>

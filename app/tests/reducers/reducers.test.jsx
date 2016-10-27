@@ -53,24 +53,31 @@ describe('Reducers', () => {
             expect(res[0]).toEqual(action.todo);
         });
 
-        it('should toggle todo completed', () => {
-            const action = {
-                type: 'TOGGLE_TODO',
-                id: 1
-            };
-
+        it('should update todo', () => {
             const currentState = [{
                 id: 1,
                 text: 'test',
-                completed: false,
+                completed: true,
                 createdAt: 0,
-                completedAt: null
+                completedAt: 123
             }];
+
+            const updates = {
+                completed: false,
+                completedAt: null
+            };
+
+            const action = {
+                type: 'UPDATE_TODO',
+                id: currentState[0].id,
+                updates
+            };
 
             const res = reducers.todosReducer(df(currentState), df(action));
             
-            expect(res[0].completed).toEqual(true);
-            expect(res[0].completedAt).toBeA('number');
+            expect(res[0].completed).toEqual(updates.completed);
+            expect(res[0].completedAt).toEqual(updates.completedAt);
+            expect(res[0].text).toEqual(currentState[0].text);
         });
 
         it('should add existing todos', () => {
@@ -90,26 +97,6 @@ describe('Reducers', () => {
 
             expect(res.length).toEqual(1);
             expect(res[0]).toEqual(todos[0]);
-        });
-
-        it('should toggle todo not completed', () => {
-            const action = {
-                type: 'TOGGLE_TODO',
-                id: 1
-            };
-
-            const currentState = [{
-                id: 1,
-                text: 'test',
-                completed: true,
-                createdAt: 0,
-                completedAt: 123
-            }];
-
-            const res = reducers.todosReducer(df(currentState), df(action));
-            
-            expect(res[0].completed).toEqual(false);
-            expect(res[0].completedAt).toEqual(null);
         });
 
     });
