@@ -88,15 +88,23 @@ describe('Actions', () => {
 
     describe('Tests with firebase todos', () => {
         let testTodoRef;
+        const testTodo = {
+            text: 'Something to do',
+            completed: false,
+            createdAt: 1234567
+        };
 
         beforeEach(done => {
-            testTodoRef = firebaseRef.child('todos').push();
+            const todosRef = firebaseRef.child('todos');
 
-            testTodoRef.set({
-                text: 'Something to do',
-                completed: false,
-                createdAt: 1234567
-            }).then(done);
+            todosRef.remove()
+                .then(() => {
+                    testTodoRef = firebaseRef.child('todos').push();
+
+                    return testTodoRef.set(testTodo);
+                })
+                .then(done)
+                .catch(done);
         });
 
         afterEach(done => {
@@ -104,7 +112,7 @@ describe('Actions', () => {
         });
 
         it('should toggle todo and dispatch UPDATE_TODO action', done => {
-            const store = createMockStore();
+            const store = createMockStore({});
             const action = actions.startUpdateTodo(testTodoRef.key, false);
 
             const resAction = {
@@ -122,6 +130,26 @@ describe('Actions', () => {
                     // while `toExist` allows us to ensure `completedAt` is in the returned object even though we can't test the value
                     expect(mockActions[0]).toInclude(resAction);
                     expect(mockActions[0].updates.completedAt).toExist();
+
+                    done();
+                }, done);
+        });
+
+        it('should initialise todos from firebase and dispatch ADD_TODOS action', done => {
+            const store = createMockStore({});
+            const action = actions.startAddTodos();
+
+            const resAction = {
+                type: 'ADD_TODOS',
+                todos: [ Object.assign({}, { id: testTodoRef.key }, testTodo) ]
+            };
+
+            store.dispatch(action)
+                .then(() => {
+                    const mockActions = store.getActions();
+
+                    expect(mockActions.length).toEqual(1);
+                    expect(mockActions[0]).toEqual(resAction);
 
                     done();
                 }, done);

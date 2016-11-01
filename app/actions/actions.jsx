@@ -46,6 +46,19 @@ export const addTodos = todos => {
     };
 };
 
+export const startAddTodos = () => {
+    return (dispatch, getState) => {
+        const todoRef = firebaseRef.child('todos').once('value');
+
+        return todoRef.then(snapshot => {
+            const todosObj = snapshot.val() || {};
+            const todos = Object.keys(todosObj).map(id => Object.assign({}, { id }, todosObj[id]));
+
+            dispatch(addTodos(todos));
+        }, err => console.log('Error retrieving intial todo list', err));
+    };
+};
+
 export const updateTodo = (id, updates) => {
     return {
         type: 'UPDATE_TODO',
