@@ -14,7 +14,7 @@ const TestUtils = require('react-addons-test-utils');
 const configureStore = require('configureStore');
 
 // our component to be tested
-const TodoApp = require('TodoApp');
+import { TodoApp } from 'TodoApp';
 import TodoList from 'TodoList';
 
 describe('TodoApp', () => {

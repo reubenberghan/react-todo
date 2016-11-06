@@ -9,7 +9,8 @@ const { Provider } = require('react-redux');
 const { Route, Router, IndexRoute, hashHistory } = require('react-router');
 
 // app components
-const TodoApp = require('TodoApp');
+import TodoApp from 'TodoApp';
+import Login from 'Login';
 
 // redux components
 const actions = require('actions');
@@ -38,7 +39,12 @@ require('style!css!sass!applicationStyles');
 // we then nest further `Route` components to define the components we want rendered at which route
 ReactDOM.render(
     <Provider store={ store }>
-        <TodoApp />
+        <Router history={ hashHistory }>
+            <Route path="/">
+                <Route path="/todos" component={ TodoApp } />
+                <IndexRoute component={ Login } />
+            </Route>
+        </Router>
     </Provider>,
     document.getElementById('app')
 );
