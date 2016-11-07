@@ -4,28 +4,23 @@
 const React = require('react');
 const ReactDOM = require('react-dom');
 const { Provider } = require('react-redux');
-
 // using es6s destructuring feature to pull out all the required constiables from the `react-route` module
-const { Route, Router, IndexRoute, hashHistory } = require('react-router');
+const { hashHistory } = require('react-router');
 
-// app components
-import TodoApp from 'TodoApp';
-import Login from 'Login';
+import firebase from 'app/firebase/';
+import router from 'app/router/';
 
 // redux components
 const actions = require('actions');
 const store = require('configureStore').configure();
 
-const TodoAPI = require('TodoAPI');
-
-// store.subscribe(() => {
-//     const state = store.getState();
-//     console.log('New state', state);
-//     TodoAPI.setTodos(state.todos);
-// });
-
-// const initialTodos = TodoAPI.getTodos();
-// store.dispatch(actions.addTodos(initialTodos));
+firebase.auth().onAuthStateChanged(user => {
+    if (user) {
+        hashHistory.push('/todos')
+    } else {
+        hashHistory.push('/');
+    }
+});
 
 store.dispatch(actions.startAddTodos());
 
@@ -39,12 +34,7 @@ require('style!css!sass!applicationStyles');
 // we then nest further `Route` components to define the components we want rendered at which route
 ReactDOM.render(
     <Provider store={ store }>
-        <Router history={ hashHistory }>
-            <Route path="/">
-                <Route path="/todos" component={ TodoApp } />
-                <IndexRoute component={ Login } />
-            </Route>
-        </Router>
+        { router }
     </Provider>,
     document.getElementById('app')
 );
