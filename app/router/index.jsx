@@ -5,6 +5,7 @@ import { Route, Router, IndexRoute, hashHistory } from 'react-router';
 
 import TodoApp from 'TodoApp';
 import Login from 'Login';
+
 import firebase from 'app/firebase/';
 
 const requireLogin = (nextState, replace, next) => {

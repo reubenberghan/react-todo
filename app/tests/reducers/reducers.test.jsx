@@ -101,4 +101,25 @@ describe('Reducers', () => {
 
     });
 
+    describe('authReducer', () => {
+
+        it('should add uid on login', () => {
+            const action = { type: 'LOGIN', uid: '123abc' };
+
+            const res = reducers.authReducer(df({}), df(action));
+
+            expect(res).toEqual({ uid: action.uid });
+        });
+
+        it('should remove uid(s) on logout', () => {
+            const authData = { uid: '123abc' };
+            const action = { type: 'LOGOUT' };
+
+            const res = reducers.authReducer(df(authData), df(action));
+
+            expect(res).toEqual({});
+        });
+
+    });
+
 });
