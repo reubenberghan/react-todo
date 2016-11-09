@@ -99,6 +99,23 @@ describe('Reducers', () => {
             expect(res[0]).toEqual(todos[0]);
         });
 
+        it('should remove existing todos on LOGOUT', () => {
+            const todos = [{
+                id: '111',
+                text: 'anything',
+                completed: false,
+                completedAt: null,
+                createdAt: 100
+            }];
+            const action = {
+                type: 'LOGOUT'
+            };
+
+            const res = reducers.todosReducer(df(todos), df(action));
+
+            expect(res.length).toEqual(0);
+        });
+
     });
 
     describe('authReducer', () => {
